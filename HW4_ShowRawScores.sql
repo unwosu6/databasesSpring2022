@@ -1,6 +1,6 @@
 DROP PROCEDURE IF EXISTS ShowRawScores;
 
-DELIMITER //;
+DELIMITER //
 
 CREATE PROCEDURE ShowRawScores(IN sid VARCHAR(10))
 
@@ -9,7 +9,7 @@ BEGIN
     SELECT
         GROUP_CONCAT(DISTINCT
             CONCAT(
-                'max(case when aname - ''',
+                'max(case when aname = ''',
                 aname,
                 ''' then score end) as ''',
                 aname,
