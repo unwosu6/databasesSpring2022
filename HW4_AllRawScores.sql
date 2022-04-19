@@ -1,25 +1,17 @@
--- If given any valid password present in the HW4 passwords table, display a
--- table showing the raw scores for all students in the course, sorted in ascending order by section
--- number, then last name and finally first name. The display order within a given row and the
--- column headers in the table should match that outlined in problem 1 above. If the supplied
--- password is not present in the table, the PHP script should not display any table, but should
--- instead display the descriptive message ”ERROR: Invalid password”. Use the filenames
--- HW4 ShowAllRawScores.sql and HW4 ShowAllRawScores.php for this item
-
 DROP PROCEDURE IF EXISTS AllRawScores;
 
 DELIMITER //
 
-CREATE PROCEDURE ShowRawScores(IN pword VARCHAR(15))
-
+CREATE PROCEDURE AllRawScores(IN pword VARCHAR(15))
+    -- IF EXISTS(SELECT * FROM HW4_PASSWORD WHERE curpasswords = pword) THEN
 BEGIN
     SET @sql = NULL;
     SELECT
         GROUP_CONCAT(DISTINCT
             CONCAT(
-                'max(case when aname = ''',
+                'max(case when RS.aname = ''',
                 aname,
-                ''' then score end) as ''',
+                ''' then RS.score end) as ''',
                 aname,
                 ''''
             )
@@ -27,13 +19,26 @@ BEGIN
         ) INTO @sql
         FROM HW4_Assignment;
 
-        SET @sql = CONCAT('SELECT sid, ',
+        SET @sql = CONCAT('SELECT S.sid, S.lname, S.fname ',
                          @sql,
-                         'FROM HW4_RawScore WHERE sid = ',
-                         '?');
+                         'FROM HW4_Student AS S JOIN HW4_RawScore AS RS ON RS.sid = S.sid');
+
+        -- SET @sql = CONCAT('SELECT S.sid, S.lname, S.fname ',
+        --                  @sql,
+        --                  'FROM HW4_Student AS S JOIN HW4_RawScore AS RS ON RS.sid = S.sid ',
+        --                  'ORDER BY S.sid ASC, S.lname ASC, S.fname ASC');
         PREPARE stmt FROM @sql;
-        EXECUTE stmt USING sid;
+        EXECUTE stmt;
         DEALLOCATE PREPARE stmt;
 END;//
+
+        -- SET @sql = CONCAT('SELECT S.sid, S.lname, S.fname',
+        --                 @sql,
+        --                 'FROM HW4_Student AS S, HW4_RawScore AS RS, HW4_Assignment AS A ON RS.aname = A.aname AND RS.sid = S.sid',
+        --                 'ORDER BY S.sid ASC, S.lname ASC, S.fname ASC');
+        -- PREPARE stmt FROM @sql;
+        -- DEALLOCATE PREPARE stmt;
+        --END IF;
+-- END;//
 
 DELIMITER ;

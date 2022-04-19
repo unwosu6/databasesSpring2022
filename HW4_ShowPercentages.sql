@@ -3,7 +3,6 @@ DROP PROCEDURE IF EXISTS ShowPercentages;
 DELIMITER //
 
 CREATE PROCEDURE ShowPercentages(IN sid VARCHAR(10))
--- max(case when aname = 'anamegiven' then score end) as aname
 BEGIN
     SET @sql = NULL;
     SELECT
