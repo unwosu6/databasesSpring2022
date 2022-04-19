@@ -21,7 +21,7 @@ BEGIN
 
         SET @sql = CONCAT('SELECT RS.sid, ',
                          @sql,
-                         'FROM HW4_RawScore AS RS JOIN HW_Assignment AS A ON RS.aname = A.aname HW4_Assignment WHERE RS.sid = ',
+                         'FROM HW4_RawScore AS RS JOIN HW4_Assignment AS A ON RS.aname = A.aname WHERE RS.sid = ',
                          '?');
         PREPARE stmt FROM @sql;
         EXECUTE stmt USING sid;
