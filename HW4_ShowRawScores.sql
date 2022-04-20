@@ -18,7 +18,7 @@ BEGIN
                 )
                 ORDER BY atype DESC, aname ASC
             ) INTO @sql
-            FROM HW4_Assignment;
+        FROM HW4_Assignment;
 
             SET @sql = CONCAT('SELECT RS.sid, S.lname, S.fname, S.sec, ',
                             @sql,
@@ -27,8 +27,6 @@ BEGIN
             PREPARE stmt FROM @sql;
             EXECUTE stmt USING sid;
             DEALLOCATE PREPARE stmt;
-        ELSE
-        SELECT 'ERROR' AS sid;
     END IF;
 END;//
 

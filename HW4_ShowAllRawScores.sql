@@ -18,8 +18,8 @@ BEGIN
         -- SELECT sid 
         -- FROM HW4_Student 
         -- ORDER BY sec ASC, lname ASC, fname ASC;
-    ELSE
-        SELECT 'ERROR' AS sid;
+        -- if ($result->num_rows > 0)
+        -- 
     END IF;
 END;//
 

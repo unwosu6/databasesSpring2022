@@ -14,61 +14,45 @@
 
 	// proceed with query only if supplied SID is non-empty
 	if (!empty($item)) {
-	echo $item;
-	echo "<br><br>";
+		echo $item;
+		echo "<br><br>";
 
-	// call the stored procedure we already defined on dbase
-	if ($result = $conn->query("CALL ShowRawScores('".$item."');")) {
-		
-		$flist = $result->fetch_fields();
+		// call the stored procedure we already defined on dbase
+		if ($result = $conn->query("CALL ShowRawScores('".$item."');")) {
+			
+			if ($result->num_rows > 0) {
+				echo "<table border=\"2px solid black\">";
 
-		//if $result["SID"] == "ERROR" {
-		echo "HELLO: ".reset(get_object_vars($result));
-		//} else {}
-		// output the name of each attribute in flist
-		// echo "hello".$result->fetch_row()['SID']."no";
-		foreach($result as $row){
-			foreach($flist as $fname){
-				if ($row[$fname->name] == "ERROR") {
-					echo "ERROR: SID ".$item." not found";
-					break;
-				} else {
-					echo "<table border=\"2px solid black\">";
+				// output a row of table headers
+				echo "<tr>";
+				// collect an array holding all attribute names in $result
+				$flist = $result->fetch_fields();
 
-					// output a row of table headers
+				foreach($flist as $fname){
+					echo "<td>".$fname->name."</td>";
+				}
+				echo "</tr>";
+
+				// output a row of table for each row in result, using flist names
+				// to obtain the appropriate attribute value for each column
+				foreach($result as $row){
+					// reset the attribute names array
+					$flist = $result->fetch_fields(); 
 					echo "<tr>";
-					// collect an array holding all attribute names in $result
-					$flist = $result->fetch_fields();
-
 					foreach($flist as $fname){
-						echo "<td>".$fname->name."</td>";
+					echo "<td>".$row[$fname->name]."</td>";
 					}
 					echo "</tr>";
-
-					// output a row of table for each row in result, using flist names
-					// to obtain the appropriate attribute value for each column
-					foreach($result as $row){
-						// reset the attribute names array
-						$flist = $result->fetch_fields(); 
-						echo "<tr>";
-						foreach($flist as $fname){
-						echo "<td>".$row[$fname->name]."</td>";
-						}
-						echo "</tr>";
-					}
-					echo "</table>";
 				}
-				break;
+				echo "</table>";
+			} else {
+				echo "ERROR: SID ".$item." not found";
 			}
-		}
-		
-		echo "<br>";
-
+			echo "<br>";
 		} else {
 			echo "Call to ShowRawScores failed<br>";
-		}   
+		}
 	}
-
 	// close the connection opened by open.php
 	$conn->close();
 ?>
