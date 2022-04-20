@@ -19,14 +19,13 @@ BEGIN
                 ORDER BY atype DESC, aname ASC
             ) INTO @sql
         FROM HW4_Assignment;
-
-            SET @sql = CONCAT('SELECT RS.sid, S.lname, S.fname, S.sec, ',
-                            @sql,
-                            'FROM HW4_RawScore AS RS JOIN HW4_Student AS S ON RS.sid = S.sid WHERE RS.sid = ',
-                            '?');
-            PREPARE stmt FROM @sql;
-            EXECUTE stmt USING sid;
-            DEALLOCATE PREPARE stmt;
+        SET @sql = CONCAT('SELECT RS.sid, S.lname, S.fname, S.sec, ',
+                        @sql,
+                        'FROM HW4_RawScore AS RS JOIN HW4_Student AS S ON RS.sid = S.sid WHERE RS.sid = ',
+                        '?');
+        PREPARE stmt FROM @sql;
+        EXECUTE stmt USING sid;
+        DEALLOCATE PREPARE stmt;
     END IF;
 END;//
 

@@ -3,7 +3,7 @@
 <?php
 
 ini_set('error_reporting', E_ALL);
-ini_set('display_errors', true);
+ini_set('display_errors', false);
 include 'conf.php';
 $conn = new mysqli($dbhost,$dbuser,$dbpass,$dbname);
 
@@ -19,45 +19,46 @@ if (mysqli_connect_errno()) {
 
     $result = $conn->store_result(); //set result to the first table that is returned from the procedure
 
+	echo "<h2>All Weighted Averages</h2><br>";
 
     if (!$result) {
-        echo "Query failed!\n";
-        print mysqli_error($db);
+        echo "ERROR: Invalid password";
+        //print mysqli_error($db);
     } else {
-            $myrow = $result->fetch_row();
-            echo "<table border=\"2px solid black\">";
+		$myrow = $result->fetch_row();
+		echo "<table border=\"2px solid black\">";
 
-			// output a row of table headers
-			echo "<tr>";
-			// collect an array holding all attribute names in $result
-			$flist = $result->fetch_fields();
-			// output the name of each attribute in flist
-			foreach($flist as $fname){
-				echo "<td>".$fname->name."</td>";
-			}
-			echo "</tr>";
-			
-			do {
-				foreach($result as $row){
+		// output a row of table headers
+		echo "<tr>";
+		// collect an array holding all attribute names in $result
+		$flist = $result->fetch_fields();
+		// output the name of each attribute in flist
+		foreach($flist as $fname){
+			echo "<td>".$fname->name."</td>";
+		}
+		echo "</tr>";
+		
+		do {
+			foreach($result as $row){
 
-					// reset the attribute names array
-					$flist = $result->fetch_fields(); 
-					echo "<tr>";
-					foreach($flist as $fname){
-					echo "<td>".$row[$fname->name]."</td>";
-					}
-					echo "</tr>";
+				// reset the attribute names array
+				$flist = $result->fetch_fields(); 
+				echo "<tr>";
+				foreach($flist as $fname){
+				echo "<td>".$row[$fname->name]."</td>";
 				}
-	
-				$result->free();
-				$conn->next_result();
-            	$result = $conn->store_result();
-				$myrow = $result->fetch_row();
+				echo "</tr>";
+			}
 
-			} while ($conn->more_results());
+			$result->free();
+			$conn->next_result();
+			$result = $conn->store_result();
+			$myrow = $result->fetch_row();
 
-            echo "</table>\n";
-    }
+		} while ($conn->more_results());
+
+		echo "</table>\n";
+	}
 }
 ?>
 </body>

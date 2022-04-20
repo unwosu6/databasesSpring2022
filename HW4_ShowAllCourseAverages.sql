@@ -15,8 +15,6 @@ BEGIN
             CALL ShowPercentages(current_sid); 
         UNTIL done
         END REPEAT;
-    ELSE
-        SELECT 'ERROR' AS sid;
     END IF;
 END;//
 
