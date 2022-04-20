@@ -1,4 +1,4 @@
-<head><title>Raw Score</title></head>
+<head><title>Percentages</title></head>
 <body>
 <?php
 
@@ -9,7 +9,7 @@
 	$item = $_POST['SID'];
 
 	// echo some basic header info onto the page
-	echo "<h2>Student ID Raw Scores</h2><br>";
+	echo "<h2>Student ID Percentages</h2><br>";
 	echo "SID: ";
 
     // proceed with query only if supplied SID is non-empty
@@ -18,7 +18,7 @@
 	   echo "<br><br>";
 
        // call the stored procedure we already defined on dbase
-	   if ($result = $conn->query("CALL ShowRawScores('".$item."');")) {
+	   if ($result = $conn->query("CALL ShowPercentages('".$item."');")) {
 
 	      echo "<table border=\"2px solid black\">";
 
@@ -47,7 +47,7 @@
 	      echo "</table>";
 
           } else {
-             echo "Call to ShowRawScores failed<br>";
+             echo "Call to ShowPercentages failed<br>";
 	  }   
    }
 
