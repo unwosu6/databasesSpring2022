@@ -23,7 +23,7 @@
 		$flist = $result->fetch_fields();
 
 		//if $result["SID"] == "ERROR" {
-			//echo $flist[0]
+		echo "HELLO: ".reset(get_object_vars($result));
 		//} else {}
 		// output the name of each attribute in flist
 		// echo "hello".$result->fetch_row()['SID']."no";
