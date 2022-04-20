@@ -26,6 +26,7 @@
 			//echo $flist[0]
 		//} else {}
 		// output the name of each attribute in flist
+		// echo "hello".$result->fetch_row()['SID']."no";
 		foreach($result as $row){
 			foreach($flist as $fname){
 				if ($row[$fname->name] == "ERROR") {
