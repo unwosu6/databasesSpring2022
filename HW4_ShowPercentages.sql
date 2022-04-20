@@ -22,7 +22,7 @@ BEGIN
     SELECT
         GROUP_CONCAT(DISTINCT
             CONCAT(
-                '.4*sum(case when A.atype = ''QUIZ'' then RS.score/A.ptsposs end)+.6*sum(case when A.atype = ''TEST'' RS.score/A.ptsposs end) as ''wei_avg'', '
+                '.4*sum(case when A.atype = ''QUIZ'' then RS.score/A.ptsposs end)+.6*sum(case when A.atype = ''EXAM'' RS.score/A.ptsposs end) as ''wei_avg'', '
             )
         ) INTO @sql2
     FROM HW4_Assignment;
