@@ -6,7 +6,6 @@ CREATE PROCEDURE ShowPercentages(IN sid VARCHAR(10))
 BEGIN
     IF EXISTS(SELECT * FROM HW4_Student AS S WHERE S.sid = sid) THEN
         SET @sql = NULL;
-        SET @sql2 = NULL;
         SELECT
             GROUP_CONCAT(DISTINCT
                 CONCAT(
