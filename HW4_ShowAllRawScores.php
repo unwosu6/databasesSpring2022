@@ -1,63 +1,55 @@
-<head><title>Raw Score</title></head>
+<head><title>All Raw Scores</title></head>
 <body>
 <?php
 
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', false);
-include 'conf.php';
-$conn = new mysqli($dbhost,$dbuser,$dbpass,$dbname);
+	//open a connection to dbase server 
+	include 'open.php';
 
-if (mysqli_connect_errno()) {
+	// collect the posted value in a variable called $item
+	$item = $_POST['password'];
 
-    echo "Connection failed!";
-
-} else {
-
-    $VAR = $_POST['password'];
-
-    $conn->multi_query("CALL AllRawScores('".$VAR."');"); //use if the procedure will return multiple tables (i.e. if your procedure may run > 1 query during 1 call)
-
-    $result = $conn->store_result(); //set result to the first table that is returned from the procedure
-
+	// echo some basic header info onto the page
 	echo "<h2>All Raw Scores</h2><br>";
 
-    if (!$result) {
-        echo "ERROR: Invalid password";
-    } else {
-		$myrow = $result->fetch_row();
-		echo "<table border=\"2px solid black\">";
+	// proceed with query only if supplied SID is non-empty
+	if (!empty($item)) {
+		// call the stored procedure we already defined on dbase
+		if ($result = $conn->query("CALL AllRawScores('".$item."');")) {
+			
+			if ($result->num_rows > 0) {
+				echo "<table border=\"2px solid black\">";
 
-		// output a row of table headers
-		echo "<tr>";
-		// collect an array holding all attribute names in $result
-		$flist = $result->fetch_fields();
-		// output the name of each attribute in flist
-		foreach($flist as $fname){
-			echo "<td>".$fname->name."</td>";
-		}
-		echo "</tr>";
-		
-		do {
-			foreach($result as $row){
-
-				// reset the attribute names array
-				$flist = $result->fetch_fields(); 
+				// output a row of table headers
 				echo "<tr>";
+				// collect an array holding all attribute names in $result
+				$flist = $result->fetch_fields();
+
 				foreach($flist as $fname){
-				echo "<td>".$row[$fname->name]."</td>";
+					echo "<td>".$fname->name."</td>";
 				}
 				echo "</tr>";
+
+				// output a row of table for each row in result, using flist names
+				// to obtain the appropriate attribute value for each column
+				foreach($result as $row){
+					// reset the attribute names array
+					$flist = $result->fetch_fields(); 
+					echo "<tr>";
+					foreach($flist as $fname){
+					echo "<td>".$row[$fname->name]."</td>";
+					}
+					echo "</tr>";
+				}
+				echo "</table>";
+			} else {
+				echo "ERROR: Invalid password";
 			}
-
-			$result->free();
-			$conn->next_result();
-			$result = $conn->store_result();
-			$myrow = $result->fetch_row();
-
-		} while ($conn->more_results());
-
-		echo "</table>\n";
-    }
-}
+			echo "<br>";
+		} else {
+			echo "Call to AllRawScores failed<br>";
+		}
+	}
+	// close the connection opened by open.php
+	$conn->close();
 ?>
 </body>

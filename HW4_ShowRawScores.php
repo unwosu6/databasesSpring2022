@@ -9,7 +9,7 @@
 	$item = $_POST['SID'];
 
 	// echo some basic header info onto the page
-	echo "<h2>Student ID Raw Scores</h2><br>";
+	echo "<h2>Student's Raw Scores</h2><br>";
 	echo "SID: ";
 
 	// proceed with query only if supplied SID is non-empty
