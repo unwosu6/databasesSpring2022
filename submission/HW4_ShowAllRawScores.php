@@ -1,4 +1,5 @@
-<head><title>All Course Averages</title></head>
+<!-- Udochukwu Nwosu unwosu6 -->
+<head><title>All Raw Scores</title></head>
 <body>
 <?php
 
@@ -9,12 +10,12 @@
 	$item = $_POST['password'];
 
 	// echo some basic header info onto the page
-	echo "<h2>All Course Averages</h2><br>";
+	echo "<h2>All Raw Scores</h2><br>";
 
 	// proceed with query only if supplied SID is non-empty
 	if (!empty($item)) {
 		// call the stored procedure we already defined on dbase
-		if ($result = $conn->query("CALL AllCourseAverages('".$item."');")) {
+		if ($result = $conn->query("CALL AllRawScores('".$item."');")) {
 			
 			if ($result->num_rows > 0) {
 				echo "<table border=\"2px solid black\">";
@@ -46,7 +47,7 @@
 			}
 			echo "<br>";
 		} else {
-			echo "Call to AllCourseAverages failed<br>";
+			echo "Call to AllRawScores failed<br>";
 		}
 	}
 	// close the connection opened by open.php

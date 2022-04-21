@@ -1,4 +1,4 @@
-unwosu6
+Udochukwu Nwosu unwosu6
 
 Most of my code is simple and works well but I just wanted to show the work I did before I got here
 that was not necessary at all but sort of cool (not efficent though). It took me so long to figure out
