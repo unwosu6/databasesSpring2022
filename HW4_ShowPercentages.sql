@@ -15,12 +15,10 @@ BEGIN
                     aname,
                     ''''
                 )
-                -- selec ISNULL(columnName, 0) from table
-
                 ORDER BY atype DESC, aname ASC
             ) INTO @sql
         FROM HW4_Assignment;
-        SET @sql = CONCAT('SELECT S.SID, S.lname, S.fname, S.sec, ',
+        SET @sql = CONCAT('SELECT S.sid, S.lname, S.fname, S.sec, ',
                         @sql,
                         ', CAST(IFNULL(40*(select sum(RS.score)/sum(A.ptsposs) from HW4_RawScore AS RS JOIN HW4_Assignment AS A ON A.aname = RS.aname where A.atype = ''QUIZ'' and RS.sid = ?),0) + ',
                         '60*(select sum(RS.score)/sum(A.ptsposs) from HW4_RawScore AS RS JOIN HW4_Assignment AS A ON A.aname = RS.aname where A.atype = ''EXAM'' and RS.sid = ?) AS DECIMAL(5,2)) as courseAvg ',
