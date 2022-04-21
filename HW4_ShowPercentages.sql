@@ -15,15 +15,17 @@ BEGIN
                     aname,
                     ''''
                 )
+                -- selec ISNULL(columnName, 0) from table
+
                 ORDER BY atype DESC, aname ASC
             ) INTO @sql
         FROM HW4_Assignment;
-        SET @sql = CONCAT('SELECT S.SID, S.lname, S.fname, S.sec, CAST(40*sum(Q.score)/sum(Q.ptsposs)+60*sum(E.score)/sum(E.ptsposs) AS DECIMAL) AS ''wei_avg'', ',
+        SET @sql = CONCAT('SELECT S.SID, S.lname, S.fname, S.sec, ',
                         @sql,
-                        'FROM HW4_RawScore AS RS JOIN HW4_Assignment AS A JOIN HW4_Student AS S ON RS.aname = A.aname AND S.sid = RS.sid JOIN ',
-                        '(SELECT RS1.sid, RS1.score, A1.ptsposs FROM HW4_RawScore AS RS1 JOIN HW4_Assignment AS A1 ON A1.aname=RS1.aname WHERE A1.atype = ''QUIZ'' AND RS1.sid = ?) AS Q ON Q.sid = S.sid JOIN ',
-                        '(SELECT RS1.sid, RS1.score, A1.ptsposs FROM HW4_RawScore AS RS1 JOIN HW4_Assignment AS A1 ON A1.aname=RS1.aname WHERE A1.atype = ''EXAM'' AND RS1.sid = ?) AS E ON Q.sid = E.sid ',
-                        'WHERE RS.sid = ',
+                        ', CAST(IFNULL(40*(select sum(RS.score)/sum(A.ptsposs) from HW4_RawScore AS RS JOIN HW4_Assignment AS A ON A.aname = RS.aname where A.atype = ''QUIZ'' and RS.sid = ?),0) + ',
+                        '60*(select sum(RS.score)/sum(A.ptsposs) from HW4_RawScore AS RS JOIN HW4_Assignment AS A ON A.aname = RS.aname where A.atype = ''EXAM'' and RS.sid = ?) AS DECIMAL(5,2)) as courseAvg ',
+                        'FROM HW4_Student AS S JOIN HW4_RawScore AS RS ON S.sid = RS.sid JOIN HW4_Assignment AS A ON A.aname = RS.aname ',
+                        'WHERE S.sid = ',
                         '?');
         PREPARE stmt FROM @sql;
         EXECUTE stmt USING sid,sid,sid;
